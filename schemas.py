@@ -5,7 +5,7 @@ ma = Marshmallow()
 
 class UserSchema(ma.Schema):
     class Meta():
-        fields = ('id', 'public_id', 'name', 'password', 'admin', 'age','sex', 'time','mobile_no')
+        fields = ('id', 'public_id', 'name', 'password', 'admin', 'age','sex', 'time','mobile_no','weight')
 
 
 user_schema = UserSchema()
