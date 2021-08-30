@@ -57,9 +57,14 @@ def get_one_user(current_user,public_id):
     return user_schema.jsonify(user)
 
 @app.route('/user',methods=['POST'])
-def create_user():
+@token_required
+def create_user(current_user):
+    if not current_user.admin:
+        return jsonify({"message":"cannot perform that function"})
     data = request.json['password']
     name = request.json['name']
+    if User.query.filter_by(name = name).first():
+        return jsonify({"message":"name is already used"})
     hashed_password = generate_password_hash(data, method='sha256')
     new_user = User(public_id=str(uuid.uuid4()), name=name,password=hashed_password,admin=False)
     db.session.add(new_user)
@@ -121,6 +126,7 @@ def get_all_patient(current_user):
 @app.route('/patient/<id>',methods=['GET'])
 @token_required
 def get_single_patient(current_user,id):
+
     if not current_user.admin:
         return jsonify({"message":"cannot perform that function"})
     patient = Patient.query.get(id)
@@ -130,14 +136,16 @@ def get_single_patient(current_user,id):
 @app.route('/patient',methods=['POST'])
 @token_required
 def create_patient(current_user):
+
     if not current_user.admin:
         return jsonify({"message":"cannot perform that function"})
     name = request.json['name']
     age = request.json['age']
     sex = request.json['sex']
     mobile_no = request.json['mobile_no']
+    weight = request.json['weight']
 
-    new_patient = Patient(name, age, sex, mobile_no)
+    new_patient = Patient(name, age, sex, mobile_no,weight)
     db.session.add(new_patient)
     db.session.commit()
 
@@ -154,11 +162,12 @@ def update_patient(current_user,id):
     age = request.json['age']
     sex = request.json['sex']
     mobile_no = request.json['mobile_no']
-
+    weight = request.json['weight']
     patient.name = name
     patient.age = age
     patient.sex = sex
     patient.mobile_no = mobile_no
+    patient.weight = weight
 
     db.session.commit()
     return jsonify({"message":"Patient details updated"})
