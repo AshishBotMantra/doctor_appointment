@@ -10,6 +10,7 @@ class User(db.Model):
     password = db.Column(db.String(250))
     admin = db.Column(db.Boolean)
 
+
     def __init__(self,public_id,name,password,admin):
         self.public_id = public_id
         self.name = name
@@ -24,9 +25,11 @@ class Patient(db.Model):
     sex = db.Column(db.String())
     mobile_no = db.Column(db.Integer())
     time = db.Column(db.DateTime, default=datetime.utcnow)
+    weight = db.Column(db.Integer())
 
-    def __init__(self,name,age,sex,mobile_no):
+    def __init__(self,name,age,sex,mobile_no,weight):
         self.name = name
         self.age = age
         self.sex = sex
         self.mobile_no = mobile_no
+        self.weight = weight
