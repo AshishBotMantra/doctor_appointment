@@ -3,6 +3,7 @@ from datetime import datetime
 db = SQLAlchemy()
 
 class User(db.Model):
+    __tablename__ = 'User'
     id = db.Column(db.Integer, primary_key=True)
     public_id = db.Column(db.String(250),unique=True)
     name = db.Column(db.String(50))
@@ -16,6 +17,7 @@ class User(db.Model):
         self.admin = admin
 
 class Patient(db.Model):
+    __tablename__ = 'patient'
     id = db.Column(db.Integer,primary_key=True)
     name = db.Column(db.String())
     age = db.Column(db.Integer())
