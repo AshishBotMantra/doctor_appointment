@@ -57,10 +57,7 @@ def get_one_user(current_user,public_id):
     return user_schema.jsonify(user)
 
 @app.route('/user',methods=['POST'])
-@token_required
-def create_user(current_user):
-    if not current_user.admin:
-        return jsonify({"message":"cannot perform that function"})
+def create_user():
     data = request.json['password']
     name = request.json['name']
     hashed_password = generate_password_hash(data, method='sha256')
